@@ -1,0 +1,2 @@
+# Project_3-Oscar_Movies
+This project is an analysis of Oscar movies data. The analysis focuses on the number of nominations and awards that films have received. It displays the films that have received the highes number of nominations and awards; calculates the average number of nominations and awards; and denotes which films have received a below average, average, and above average number of nominations and awards. Please see the corresponding Tableau visualization for this project at: XXX.
