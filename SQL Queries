@@ -1,0 +1,89 @@
+/*Source: https://www.kaggle.com/datasets/pushpakhinglaspure/oscar-dataset*/
+
+/*This shows all of the information in the "Oscar Movies" table*/
+SELECT * FROM "Oscar Movies"
+ORDER BY Year;
+
+/*This groups films by the number of nominations they received and displays how many films received each number of nominations*/
+SELECT COUNT(Film) AS "Number of Films", Nomination
+FROM "Oscar Movies"
+GROUP BY Nomination
+ORDER BY "Number of Films";
+
+/*Similarly to the previous query, this groups films by the number of awards they received and displays how many films received each number of awards*/
+SELECT COUNT(Film) AS "Number of Films", Award
+FROM "Oscar Movies"
+GROUP BY Award
+ORDER BY "Number of Films";
+
+/*This query shows the films that have received the highest number of nominations. The query accounts for the fact that more than one film might have the maximum number of nominations and ensures that all of those films are listed*/
+SELECT Film, Year, Nomination AS "Highest Number of Nominations" 
+FROM "Oscar Movies"
+WHERE Nomination = (SELECT MAX(Nomination) FROM "Oscar Movies")
+ORDER BY Year;
+
+/*This query shows the films that have received the highest number of awards. The query accounts for the fact that more than one film might have the maximum number of awards and ensures that all of those films are listed*/
+SELECT Film, Year, Award AS "Highest Number of Awards" 
+FROM "Oscar Movies"
+WHERE Award = (SELECT MAX(Award) FROM "Oscar Movies")
+ORDER BY Year;
+
+/*This shows the results of the previous two queries together, all of the films that had either the highest number of nominations or the highest number of awards*/
+SELECT Film, Year, Nomination, Award 
+FROM "Oscar Movies"
+WHERE Nomination = (SELECT MAX(Nomination) FROM "Oscar Movies") OR Award = (SELECT MAX(Award) FROM "Oscar Movies")
+ORDER BY Year;
+
+/*This shows which film has both the highest number of nominations and the highest number of awards*/
+SELECT Film, Year, Nomination AS "Highest Number of Nominations", Award AS "Highest Number of Awards" 
+FROM "Oscar Movies"
+WHERE Nomination = (SELECT MAX(Nomination) FROM "Oscar Movies") AND Award = (SELECT MAX(Award) FROM "Oscar Movies")
+ORDER BY Year;
+
+/*This shows the average number of nominations, rounded to the nearest whole number*/
+SELECT ROUND(AVG(Nomination)) AS "Average Number of Nominations" 
+FROM "Oscar Movies";
+
+/*This shows the average number of awards, rounded to the nearest whole number*/
+SELECT ROUND(AVG(Award)) AS "Average Number of Awards" 
+FROM "Oscar Movies";
+
+/*This considers each film and how many nominations they have and notes whether they have a "Below Average, Average, or Above Average Number of Nominations"*/
+SELECT Film, Nomination,
+  CASE
+    WHEN Nomination > (SELECT ROUND(AVG(Nomination)) FROM "Oscar Movies") THEN "Above Average Number of Nominations"
+    WHEN Nomination = (SELECT ROUND(AVG(Nomination)) FROM "Oscar Movies") THEN "Average Number of Nominations"
+    WHEN Nomination < (SELECT ROUND(AVG(Nomination)) FROM "Oscar Movies") THEN "Below Average Number of Nominations"
+  END AS "Below Average, Average, or Above Average Number of Nominations"
+FROM "Oscar Movies"
+ORDER BY Nomination;
+
+/*This query expands upon the previous one, noting how many films fall into each category of "Below Average, Average, or Above Average Number of Nominations"*/
+SELECT COUNT(Film) AS "Number of Films",
+  CASE
+    WHEN Nomination > (SELECT ROUND(AVG(Nomination)) FROM "Oscar Movies") THEN "Above Average Number of Nominations"
+    WHEN Nomination = (SELECT ROUND(AVG(Nomination)) FROM "Oscar Movies") THEN "Average Number of Nominations"
+    WHEN Nomination < (SELECT ROUND(AVG(Nomination)) FROM "Oscar Movies") THEN "Below Average Number of Nominations"
+  END AS "Below Average, Average, or Above Average Number of Nominations"
+FROM "Oscar Movies"
+GROUP BY "Below Average, Average, or Above Average Number of Nominations";
+
+/*This considers each film and how many awards they have and notes whether they have a "Below Average, Average, or Above Average Number of Awards"*/
+SELECT Film, Award,
+  CASE
+    WHEN Award > (SELECT ROUND(AVG(Award)) FROM "Oscar Movies") THEN "Above Average Number of Awards"
+    WHEN Award = (SELECT ROUND(AVG(Award)) FROM "Oscar Movies") THEN "Average Number of Awards"
+    WHEN Award < (SELECT ROUND(AVG(Award)) FROM "Oscar Movies") THEN "Below Average Number of Awards"
+  END AS "Below Average, Average, or Above Average Number of Awards"
+FROM "Oscar Movies"
+ORDER BY Award;
+
+/*This query expands upon the previous one, noting how many films fall into each category of "Below Average, Average, or Above Average Number of Awards"*/
+SELECT COUNT(*) AS "Number of Films",
+  CASE
+    WHEN Award > (SELECT ROUND(AVG(Award)) FROM "Oscar Movies") THEN "Above Average Number of Awards"
+    WHEN Award = (SELECT ROUND(AVG(Award)) FROM "Oscar Movies") THEN "Average Number of Awards"
+    WHEN Award < (SELECT ROUND(AVG(Award)) FROM "Oscar Movies") THEN "Below Average Number of Awards"
+  END AS "Below Average, Average, or Above Average Number of Awards"
+FROM "Oscar Movies"
+GROUP BY "Below Average, Average, or Above Average Number of Awards";
