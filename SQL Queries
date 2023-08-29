@@ -1,7 +1,8 @@
 /*Source: https://www.kaggle.com/datasets/pushpakhinglaspure/oscar-dataset*/
 
 /*This shows all of the information in the "Oscar Movies" table*/
-SELECT * FROM "Oscar Movies"
+SELECT * 
+FROM "Oscar Movies"
 ORDER BY Year;
 
 /*This groups films by the number of nominations they received and displays how many films received each number of nominations*/
